@@ -1,15 +1,21 @@
 from django.shortcuts import render
+from django.views.generic import ListView
 
 from blog.models import Post, Category, Comment
 from blog.forms import CommentForm
 
-def blog_index(request):
-    # The minus sign tells Django to start with the largest value rather than the smallest.
-    posts = Post.objects.all().order_by('-created_on')
-    context = {
-        "posts": posts,
-    }
-    return render(request, "blog/blog_index.html", context)
+# def blog_index(request):
+#     # The minus sign tells Django to start with the largest value rather than the smallest.
+#     posts = Post.objects.all().order_by('-created_on')
+#     context = {
+#         "posts": posts,
+#     }
+#     return render(request, "blog/blog_index.html", context)
+
+class BlogIndexView(ListView):
+    model = Post
+    context_object_name = 'post_list'
+    template_name = 'blog/blog_index.html'
 
 def blog_category(request, category):
     posts = Post.objects.filter(

@@ -20,10 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o$9$vzrlamzm+4hek1*@6cerp1(iwbi&z2nt+-aqj4@kj1!kty'
+# SECRET_KEY = 'o$9$vzrlamzm+4hek1*@6cerp1(iwbi&z2nt+-aqj4@kj1!kty'
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j4eax!#a3cup@1$9obt2_+&k3q+pmu)5%asj6yjpkag')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -122,5 +127,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
